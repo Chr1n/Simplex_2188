@@ -106,15 +106,35 @@ void AppClass::InitVariables(void)
 void AppClass::ProcessKeyboard(sf::Event a_event)
 {
 	if (a_event.key.code == sf::Keyboard::Key::Escape)//Event says I pressed the Escape key
+	{
 		m_bRunning = false;
+	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) //I am currently pressing the Num1 (not the same as above)
+	{
+		if (lastPressed == sf::Keyboard::Num1)
+		{
+			Complementary = !Complementary;
+		}
+		else
+		{
+			Complementary = true;
+		}
+
+		lastPressed = sf::Keyboard::Num1;
 		m_v3Color = glm::vec3(1.0f, 0.0f, 0.0f);
+	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+	{
 		m_v3Color = glm::vec3(0.0f, 1.0f, 0.0f);
+	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+	{
 		m_v3Color = glm::vec3(0.0f, 0.0f, 1.0f);
+	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
+	{
 		m_v3Color = glm::vec3(-1.0f, -1.0f, -1.0f);
+	}
 }
 void AppClass::Display(void)
 {
