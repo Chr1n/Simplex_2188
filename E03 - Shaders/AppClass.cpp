@@ -67,7 +67,7 @@ void AppClass::InitOpenGL(void)
 }
 void AppClass::InitShaders(void)
 {
-	m_uShaderProgramID = LoadShaders("Shaders//BasicColor.vs", "Shaders//BasicColor.fs");
+	m_uShaderProgramID = LoadShaders("Shaders//BasicColor.vs", "Shaders//BasicColor.fs"); // Adjustments made in Shaders//BasicColor.fs
 	glUseProgram(m_uShaderProgramID);
 }
 void AppClass::InitVariables(void)
@@ -111,7 +111,7 @@ void AppClass::ProcessKeyboard(sf::Event a_event)
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) //I am currently pressing the Num1 (not the same as above)
 	{
-		if (lastPressed == sf::Keyboard::Num1)
+		if (previousPressed == sf::Keyboard::Num1)
 		{
 			Complementary = !Complementary;
 		}
@@ -120,19 +120,49 @@ void AppClass::ProcessKeyboard(sf::Event a_event)
 			Complementary = true;
 		}
 
-		lastPressed = sf::Keyboard::Num1;
+		previousPressed = sf::Keyboard::Num1;
 		m_v3Color = glm::vec3(1.0f, 0.0f, 0.0f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
+		if (previousPressed == sf::Keyboard::Num2)
+		{
+			Complementary = !Complementary;
+		}
+		else
+		{
+			Complementary = true;
+		}
+
+		previousPressed = sf::Keyboard::Num2;
 		m_v3Color = glm::vec3(0.0f, 1.0f, 0.0f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 	{
+		if (previousPressed == sf::Keyboard::Num3)
+		{
+			Complementary = !Complementary;
+		}
+		else
+		{
+			Complementary = true;
+		}
+
+		previousPressed = sf::Keyboard::Num3;
 		m_v3Color = glm::vec3(0.0f, 0.0f, 1.0f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
 	{
+		if (previousPressed == sf::Keyboard::Num0)
+		{
+			Complementary = !Complementary;
+		}
+		else
+		{
+			Complementary = true;
+		}
+
+		previousPressed = sf::Keyboard::Num0;
 		m_v3Color = glm::vec3(-1.0f, -1.0f, -1.0f);
 	}
 }
@@ -144,6 +174,8 @@ void AppClass::Display(void)
 	//read uniforms and send values
 	GLuint SolidColor = glGetUniformLocation(m_uShaderProgramID, "SolidColor");
 	glUniform3f(SolidColor, m_v3Color.r, m_v3Color.g, m_v3Color.b);
+	GLuint IfComplementary = glGetUniformLocation(m_uShaderProgramID, "IfComplementary");
+	glUniform1ui(IfComplementary, Complementary);
 
 	//draw content
 	glDrawArrays(GL_TRIANGLES, 0, 3);
