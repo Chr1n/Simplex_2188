@@ -115,7 +115,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E09 - ARBB", "E09 - ARBB\E0
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E10 - EntityManager", "E10 - EntityManager\E10 - EntityManager.vcxproj", "{870B329D-6DED-48D2-8E86-0893E3BB8DAB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E03 - Shaders", "E03 - Shaders\C05_Shaders.vcxproj", "{393887BB-1802-44A9-9504-73B29B10C9C9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E03 - Shaders", "E03 - Shaders\E03_Shaders.vcxproj", "{393887BB-1802-44A9-9504-73B29B10C9C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
