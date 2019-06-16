@@ -15,7 +15,7 @@ Date: 2017/05
 class Application
 {
 	MyMesh* m_pMesh = nullptr;
-	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	String m_sProgrammer = "Christopher Lawrence - cml3051@rit.edu";
 
 private:
 	static ImGuiObject gui; //GUI object
