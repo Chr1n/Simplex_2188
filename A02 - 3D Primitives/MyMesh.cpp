@@ -280,7 +280,7 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	float halfHeight = 0.5f * a_fHeight;
 
 	// Loop through number of subdivisions, and use necessary vector points for the AddTri method to build cone.
-	for (int i = 0; i < a_nSubdivisions; i++)
+	for (int i = 0; i < a_nSubdivisions; i++) 
 	{
 		vector3 point1(a_fRadius * cosf((i + 1) * dividAngle), a_fRadius * sinf((i + 1) * dividAngle), -halfHeight);
 		vector3 point2(a_fRadius * cosf(i * dividAngle), a_fRadius * sinf(i * dividAngle), -halfHeight);
@@ -316,8 +316,9 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	float dividAngle = 2.0f * PI / (float)a_nSubdivisions;
 	float halfHeight = 0.5f * a_fHeight;
 
-	// Loop through number of subdivisions, and use necessary vector points for the AddTri method to build cylinder.
-	for (int i = 0; i < a_nSubdivisions; i++)
+	// Loop through number of subdivisions, and use necessary vector points for the 
+	// AddTri and AddQuad method to build cylinder.
+	for (int i = 0; i < a_nSubdivisions; i++) 
 	{
 		vector3 point1(a_fRadius * cosf((i + 1) * dividAngle), a_fRadius * sinf((i + 1) * dividAngle), -halfHeight);
 		vector3 point2(a_fRadius * cosf(i * dividAngle), a_fRadius * sinf(i * dividAngle), -halfHeight);
@@ -330,7 +331,6 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 		AddTri(point4, point3, topOfCenter);
 		AddQuad(point3, point4, point1, point2);
 	}
-	
 	// -------------------------------
 
 	// Adding information about color
@@ -359,8 +359,32 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	// My code -----------------------
+	float dividAngle = 2.0f * PI / (float)a_nSubdivisions;
+	float halfHeight = 0.5f * a_fHeight;
+
+	// Loop through number of subdivisions, and use necessary vector points for the 
+	// AddTri and AddQuad method to build tube.
+	for (int i = 0; i < a_nSubdivisions; i++) 
+	{
+		vector3 point1(a_fOuterRadius * cosf((i + 1) * dividAngle), a_fOuterRadius * sinf((i + 1) * dividAngle), -halfHeight);
+		vector3 point2(a_fOuterRadius * cosf(i * dividAngle), a_fOuterRadius * sinf(i * dividAngle), -halfHeight);
+		vector3 point3(a_fOuterRadius * cosf((i + 1) * dividAngle), a_fOuterRadius * sinf((i + 1) * dividAngle), halfHeight);
+		vector3 point4(a_fOuterRadius * cosf(i * dividAngle), a_fOuterRadius * sinf(i * dividAngle), halfHeight);
+
+		vector3 point5(a_fInnerRadius * cosf((i + 1) * dividAngle), a_fInnerRadius * sinf((i + 1) * dividAngle), -halfHeight);
+		vector3 point6(a_fInnerRadius * cosf(i * dividAngle), a_fInnerRadius * sinf(i * dividAngle), -halfHeight);
+		vector3 point7(a_fInnerRadius * cosf((i + 1) * dividAngle), a_fInnerRadius * sinf((i + 1) * dividAngle), halfHeight);
+		vector3 point8(a_fInnerRadius * cosf(i * dividAngle), a_fInnerRadius * sinf(i * dividAngle), halfHeight);
+
+		// Horizontal Sides
+		AddQuad(point1, point2, point5, point6);
+		AddQuad(point4, point3, point8, point7);
+
+		// Vertical Sides
+		AddQuad(point3, point4, point1, point2);
+		AddQuad(point5, point6, point7, point8);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -391,8 +415,8 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fOuterRadius * 2.0f, a_v3Color);
+	// My code -----------------------
+
 	// -------------------------------
 
 	// Adding information about color
@@ -416,8 +440,7 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	// My code -----------------------
 	// -------------------------------
 
 	// Adding information about color
