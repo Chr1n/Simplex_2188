@@ -275,8 +275,21 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	// My code -----------------------
+	float dividAngle = 2.0f * PI / (float)a_nSubdivisions;
+	float halfHeight = 0.5f * a_fHeight;
+
+	// Loop through number of subdivisions, and use necessary vector points for the AddTri method to build cone.
+	for (int i = 0; i < a_nSubdivisions; i++)
+	{
+		vector3 point1(a_fRadius * cosf((i + 1) * dividAngle), a_fRadius * sinf((i + 1) * dividAngle), -halfHeight);
+		vector3 point2(a_fRadius * cosf(i * dividAngle), a_fRadius * sinf(i * dividAngle), -halfHeight);
+		vector3 baseOfCenter(0.0f, 0.0f, -halfHeight);
+		vector3 top(0.0f, 0.0f, halfHeight);
+
+		AddTri(point2, point1, baseOfCenter);
+		AddTri(point1, point2, top);
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -299,8 +312,25 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Release();
 	Init();
 
-	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	// My code -----------------------
+	float dividAngle = 2.0f * PI / (float)a_nSubdivisions;
+	float halfHeight = 0.5f * a_fHeight;
+
+	// Loop through number of subdivisions, and use necessary vector points for the AddTri method to build cylinder.
+	for (int i = 0; i < a_nSubdivisions; i++)
+	{
+		vector3 point1(a_fRadius * cosf((i + 1) * dividAngle), a_fRadius * sinf((i + 1) * dividAngle), -halfHeight);
+		vector3 point2(a_fRadius * cosf(i * dividAngle), a_fRadius * sinf(i * dividAngle), -halfHeight);
+		vector3 point3(a_fRadius * cosf((i + 1) * dividAngle), a_fRadius * sinf((i + 1) * dividAngle), halfHeight);
+		vector3 point4(a_fRadius * cosf(i * dividAngle), a_fRadius * sinf(i * dividAngle), halfHeight);
+		vector3 bottomOfCenter(0.0f, 0.0f, -halfHeight);
+		vector3 topOfCenter(0.0f, 0.0f, halfHeight);
+
+		AddTri(bottomOfCenter, point1, point2);
+		AddTri(point4, point3, topOfCenter);
+		AddQuad(point3, point4, point1, point2);
+	}
+	
 	// -------------------------------
 
 	// Adding information about color
