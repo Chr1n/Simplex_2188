@@ -276,19 +276,20 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Init();
 
 	// My code -----------------------
-	float dividAngle = 2.0f * PI / (float)a_nSubdivisions;
-	float halfHeight = 0.5f * a_fHeight;
 
-	// Loop through number of subdivisions, and use necessary vector points for the AddTri method to build cone.
-	for (int i = 0; i < a_nSubdivisions; i++) 
+	// Needed types and fields for generating a Cone.
+	// To the center of the top face of the cone
+	float dividAngle = 2.0f * PI / a_nSubdivisions;
+	vector3 upward = a_fHeight / 2 * AXIS_Y;
+
+	// Loop through number of subdivisions, and use necessary vector points for the AddQuad method to build a cone.
+	for (int i = 0; i < a_nSubdivisions; i++)
 	{
-		vector3 point1(a_fRadius * cosf((i + 1) * dividAngle), a_fRadius * sinf((i + 1) * dividAngle), -halfHeight);
-		vector3 point2(a_fRadius * cosf(i * dividAngle), a_fRadius * sinf(i * dividAngle), -halfHeight);
-		vector3 baseOfCenter(0.0f, 0.0f, -halfHeight);
-		vector3 top(0.0f, 0.0f, halfHeight);
-
-		AddTri(point2, point1, baseOfCenter);
-		AddTri(point1, point2, top);
+		// Made the sloped side tri and the botttom tri at a time because the quad is two tris.
+		// For the AddQuad method: First part is the center of the base, second part is the one point on the base circumference, 
+		// third part is the next point along the base, and the last part is the top of the cone.
+		AddQuad(-upward, a_fRadius * vector3(cos(i * dividAngle), 0, sin(i * dividAngle)) - upward,
+			a_fRadius * vector3(cos((i + 1) * dividAngle), 0, sin((i + 1) * dividAngle)) - upward, upward);
 	}
 	// -------------------------------
 
@@ -313,12 +314,14 @@ void MyMesh::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubdivisi
 	Init();
 
 	// My code -----------------------
+
+	// Types and fields needed for generating a Cylinder.
 	float dividAngle = 2.0f * PI / (float)a_nSubdivisions;
 	float halfHeight = 0.5f * a_fHeight;
 
 	// Loop through number of subdivisions, and use necessary vector points for the 
 	// AddTri and AddQuad method to build cylinder.
-	for (int i = 0; i < a_nSubdivisions; i++) 
+	for (int i = 0; i < a_nSubdivisions; i++)
 	{
 		vector3 point1(a_fRadius * cosf((i + 1) * dividAngle), a_fRadius * sinf((i + 1) * dividAngle), -halfHeight);
 		vector3 point2(a_fRadius * cosf(i * dividAngle), a_fRadius * sinf(i * dividAngle), -halfHeight);
@@ -360,6 +363,8 @@ void MyMesh::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float a_fH
 	Init();
 
 	// My code -----------------------
+
+	// Necessary types and fields for generating a Tube.
 	float dividAngle = 2.0f * PI / (float)a_nSubdivisions;
 	float halfHeight = 0.5f * a_fHeight;
 
@@ -416,7 +421,50 @@ void MyMesh::GenerateTorus(float a_fOuterRadius, float a_fInnerRadius, int a_nSu
 	Init();
 
 	// My code -----------------------
+	
+	// Necessary types and fields for generating a Torus.
+	float donutRadius = (a_fInnerRadius + a_fOuterRadius) / 2;
+	float tubeRadius = a_fOuterRadius - donutRadius;
 
+	float dividAngleA = 2.0f * PI / a_nSubdivisionsA;
+	float dividAngleB = 2.0f * PI / a_nSubdivisionsB;
+
+	vector3 currentXZVector = ZERO_V3;
+	vector3 nextXZVector = AXIS_X;
+
+	// The A subdivisions are the donut, which is about axis of symmmetry of the whole torus
+	// and B is the tube subdivisions of the tube that the torus is made of.
+	for (int a = 0; a < a_nSubdivisionsA; a++)
+	{
+		vector3 currentUp = ZERO_V3;
+		vector3 nextUp = ZERO_V3;
+
+		currentXZVector = nextXZVector;
+		nextXZVector = vector3(cos((a + 1) * dividAngleA), 0, sin((a + 1) * dividAngleA));
+		// Distances from XZ
+		
+		// Distance from Y axis
+		float currentNetRadius;
+		float nextNetRadius = tubeRadius + donutRadius;
+		
+		// Next for loop to loop through the B subdivisions to set up the necessary vectors for the
+		// AddQuad method in order to build a torus.
+		for (int b = 0; b < a_nSubdivisionsB; b++)
+		{
+			currentUp = nextUp;
+			nextUp = tubeRadius * sin((b + 1) * dividAngleB) * AXIS_Y;
+
+			currentNetRadius = nextNetRadius;
+			nextNetRadius = donutRadius + tubeRadius * cos((b + 1) * dividAngleB);
+
+			AddQuad(
+				nextUp + nextNetRadius * currentXZVector,
+				nextUp + nextNetRadius * nextXZVector,
+				currentUp + currentNetRadius * currentXZVector,
+				currentUp + currentNetRadius * nextXZVector
+			);
+		}
+	}
 	// -------------------------------
 
 	// Adding information about color
@@ -441,6 +489,47 @@ void MyMesh::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a_v3Co
 	Init();
 
 	// My code -----------------------
+	
+	// Needed types and fields for generating a Sphere.
+	float dividAngle = PI / a_nSubdivisions;
+	float currentTheta; 
+	float nextTheta = 0;
+
+	vector3 currentXY;
+	vector3 nextXY = AXIS_X * a_fRadius;
+	vector3 upward = a_fRadius * AXIS_Y;
+
+	// Nested for loop to set up appropriate and necessary vectors for the 
+	// AddTri and AddQuad methods in order to construct a sphere.
+	// Number of latitude divisions which is twice the longitude divisions as latitude.
+	for (int i = 0; i < 2 * a_nSubdivisions; i++)
+	{
+		currentXY = nextXY;
+		nextXY = a_fRadius * vector3(cos(dividAngle * (i + 1)), 0, sin(dividAngle * (i + 1)));
+
+		currentTheta = nextTheta;
+		nextTheta += dividAngle;
+
+		AddTri(upward, upward * cos(dividAngle) + nextXY * sin(dividAngle), upward * cos(dividAngle) + currentXY * sin(dividAngle));
+
+		// Phi is an angle measured from the positive y axis
+		float currentPhi; 
+		float nextPhi = 0;
+		
+		// Next loop needed to adjust the Phi angle, and use the AddQuad method with the
+		// appropriate vectors in order to properly construct the Sphere.
+		for (int j = 1; j < a_nSubdivisions; j++)
+		{
+			currentPhi = nextPhi;
+			nextPhi += dividAngle;
+			AddQuad(upward * cos(currentPhi) + currentXY * sin(currentPhi),
+				upward * cos(currentPhi) + nextXY * sin(currentPhi),
+				upward * cos(nextPhi) + currentXY * sin(nextPhi),
+				upward * cos(nextPhi) + nextXY * sin(nextPhi));
+		}
+
+		AddTri(-upward * cos(dividAngle) + currentXY * sin(dividAngle), -upward * cos(dividAngle) + nextXY * sin(dividAngle), -upward);
+	}
 	// -------------------------------
 
 	// Adding information about color
