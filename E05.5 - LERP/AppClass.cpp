@@ -2,7 +2,7 @@
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
-	m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	m_sProgrammer = "Christopher Lawrence - cml3051@rit.edu";
 
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUpward(vector3(5.0f,3.0f,15.0f), ZERO_V3, AXIS_Y);
@@ -56,15 +56,30 @@ void Application::Display(void)
 	
 
 
-
-
-	//your code goes here
+	// My Code ----------
 	v3CurrentPos = vector3(0.0f, 0.0f, 0.0f);
+	vector3 v3StartPos;  // start position
+	vector3 v3EndPos;    // end position
+	static uint pathRoute = 0;
+	v3StartPos = m_stopsList[pathRoute];
+	v3EndPos = m_stopsList[(pathRoute + 1) % m_stopsList.size()];
+
+	float fTimeBetwStops = 2.0f; // 2 seconds in between stops
+	float fPercent = MapValue(fTimer, 0.0f, fTimeBetwStops, 0.0f, 1.0f);
+
+	v3CurrentPos = glm::lerp(v3StartPos, v3EndPos, fPercent);
+
+	// Continue to the next path route, and restart the clock if fPercent is greater than or equal to 1.
+	if (fPercent >= 1.0f)
+	{
+		pathRoute++; // Next route
+		fTimer = m_pSystem->GetDeltaTime(uClock); // Restart the clock
+		pathRoute %= m_stopsList.size();
+	}
 	//-------------------
 	
 
 
-	
 	matrix4 m4Model = glm::translate(v3CurrentPos);
 	m_pModel->SetModelMatrix(m4Model);
 
