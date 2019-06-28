@@ -20,6 +20,10 @@ class Application
 	MyMesh* m_pMesh = nullptr;
 	String m_sProgrammer = "Christopher Lawrence - cml3051@rit.edu";
 
+	bool m_bXAxis = false;
+	bool m_bYAxis = false;
+	bool m_bZAxis = false;
+
 private:
 	static ImGuiObject gui; //GUI object
 

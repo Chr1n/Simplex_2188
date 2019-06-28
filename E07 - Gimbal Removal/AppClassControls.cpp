@@ -414,30 +414,60 @@ void Application::ProcessKeyboard(void)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		m_pCameraMngr->MoveVertical(fSpeed);
 #pragma endregion
+
+	// Bool variables for controlling which axis is being used depending on the key press
+	m_bXAxis = false;
+	m_bYAxis = false;
+	m_bZAxis = false;
+
+	// Switch axis based on the key press
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 	{
-		if (fMultiplier)
-			m_v3Rotation.x -= 1.0f;
+		if (fMultiplier) 
+		{
+			m_qOrientation = m_qOrientation * glm::angleAxis(glm::radians(-1.0f), AXIS_X);
+		}
 		else
-			m_v3Rotation.x += 1.0f;
+		{
+			m_qOrientation = m_qOrientation * glm::angleAxis(glm::radians(1.0f), AXIS_X);
+		}
+
+		m_bXAxis = true;
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	{
 		if (fMultiplier)
-			m_v3Rotation.y -= 1.0f;
-		else
-			m_v3Rotation.y += 1.0f;
+		{
+			m_qOrientation = m_qOrientation * glm::angleAxis(glm::radians(-1.0f), AXIS_Y);
+		}
+		else 
+		{
+			m_qOrientation = m_qOrientation * glm::angleAxis(glm::radians(1.0f), AXIS_Y);
+		}
+
+		m_bYAxis = true;
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 	{
-		if (fMultiplier)
-			m_v3Rotation.z -= 1.0f;
-		else
-			m_v3Rotation.z += 1.0f;
+		if (fMultiplier) 
+		{
+			m_qOrientation = m_qOrientation * glm::angleAxis(glm::radians(-1.0f), AXIS_Z);
+		}
+		else 
+		{
+			m_qOrientation = m_qOrientation * glm::angleAxis(glm::radians(1.0f), AXIS_Z);
+		}
+
+		m_bZAxis = true;
 	}
+
+	// Reset
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
 		m_v3Rotation = vector3(0.0f);
+		m_qOrientation = quaternion();
 	}
 }
 //Joystick
