@@ -20,7 +20,7 @@ class Application
 {
 	uint m_uOrbits = 0; //number of shapes starting at 3 and increasing in sides
 	std::vector<uint> m_shapeList; //shape index for circles
-	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	String m_sProgrammer = "Christopher Lawrence - cml3051@rit.edu";
 	
 private:
 	static ImGuiObject gui; //GUI object
