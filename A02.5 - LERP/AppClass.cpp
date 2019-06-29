@@ -79,10 +79,10 @@ void Application::Display(void)
 	// Entire block of code of calculating the stops will occur when the bool is false
 	if (!bInitOnce)
 	{
-		// Loop through the orbits  to calculate the appropriate stops
+		// Loop through the orbits to calculate the appropriate stops
 		for (uint i = 0; i < m_uOrbits; i++)
 		{
-			vector<vector3> stops;
+			vector<vector3> stops; // list of stops
 
 			// Calculate stops in terms of the number of sides
 			float segAngle = 2 * PI / (float)(i + 3);   // Angle of each segment of the current shape
