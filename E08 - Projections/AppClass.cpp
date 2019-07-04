@@ -3,7 +3,7 @@ using namespace Simplex;
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
-	m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	m_sProgrammer = "Christopher Lawrence - cml3051@rit.edu";
 
 	//Set the position and target of the camera
 	//(I'm at [0,0,10], looking at [0,0,0] and up is the positive Y axis)
@@ -45,7 +45,14 @@ void Application::Display(void)
 	//draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
 
+	//E08 Projections
 	//calculate view and projection
+	/* Methods that were needed to help create the scenes:
+		SetUp(axis);
+		SetNearFar(vector2);
+		SetPosition(vector3);
+		SetPerspective(bool);
+	*/
 	switch (m_uProjection)
 	{
 	default:
@@ -54,21 +61,30 @@ void Application::Display(void)
 		break;
 	case 2:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPerspective(false);
 		break;
 	case 3:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPosition(vector3(35.0f, 0, 0));
+		m_pCamera->SetUp(-AXIS_Z);
 		break;
 	case 4:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPosition(vector3(0, 0, -15.0f));
 		break;
 	case 5:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPosition(vector3(0, 0, -15.0f));
+		m_pCamera->SetNearFar(vector2(5.0f, 15.0f));
 		break;
 	case 6:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetPosition(vector3(0, 0, -15.0f));
+		m_pCamera->SetNearFar(vector2(1.0f, 10.0f));
 		break;
 	case 7:
 		m_pCamera->ResetCamera();
+		m_pCamera->SetUp(-AXIS_Y);
 		break;
 	}
 

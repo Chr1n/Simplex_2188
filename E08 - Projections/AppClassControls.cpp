@@ -86,20 +86,26 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 	switch (a_event.key.code)
 	{
 	default: break;
+
+	// It's orthographic if it's not perspective
 	case sf::Keyboard::Escape:
 		m_bRunning = false;
 		break;
 	case sf::Keyboard::F1:
-		m_pCameraMngr->SetCameraMode(CAM_PERSP);
+		m_pCameraMngr->SetCameraMode(CAM_PERSP); // perspective
+		m_pCamera->SetPerspective(true);
 		break;
 	case sf::Keyboard::F2:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Z);
+		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Z); // orthographic
+		m_pCamera->SetPerspective(false);
 		break;
 	case sf::Keyboard::F3:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Y);
+		m_pCameraMngr->SetCameraMode(CAM_ORTHO_Y); // orthographic
+		m_pCamera->SetPerspective(false);
 		break;
 	case sf::Keyboard::F4:
-		m_pCameraMngr->SetCameraMode(CAM_ORTHO_X);
+		m_pCameraMngr->SetCameraMode(CAM_ORTHO_X); // orthographic
+		m_pCamera->SetPerspective(false);
 		break;
 	case sf::Keyboard::F:
 		bFPSControl = !bFPSControl;
