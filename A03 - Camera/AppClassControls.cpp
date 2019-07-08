@@ -369,8 +369,8 @@ void Application::CameraRotation(float a_fSpeed)
 		fAngleX += fDeltaMouse * a_fSpeed;
 	}
 	//Change the Yaw and the Pitch of the camera
-	m_pCamera->ChangeYaw(fAngleY * 3.0f);
-	m_pCamera->ChangePitch(-fAngleX * 3.0f);
+	m_pCamera->ChangeYaw(fAngleY * 15.0f);    //turn left or right
+	m_pCamera->ChangePitch(-fAngleX * 15.0f); //up or down
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
 }
 //Keyboard
@@ -381,26 +381,26 @@ void Application::ProcessKeyboard(void)
 	for discreet on/off use ProcessKeyboardPressed/Released
 	*/
 #pragma region Camera Position
-	float fSpeed = 0.1f;
+	float fSpeed = 0.3f;
 	float fMultiplier = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
 
 	if (fMultiplier)
 		fSpeed *= 5.0f;
 
-	// Move forward or backward
+	// Move forward or backward using W or S respectively
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		m_pCamera->MoveForward(fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		m_pCamera->MoveForward(-fSpeed);
 
-	// Move Vertical
+	// Move Vertically up or down using Q or E respectively
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		m_pCamera->MoveVertical(-fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		m_pCamera->MoveVertical(fSpeed);
 
-	// Move Sideways
+	// Move Sideways left or right using A or D respectively
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		m_pCamera->MoveSideways(-fSpeed);
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
