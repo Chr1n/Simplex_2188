@@ -369,8 +369,9 @@ void Application::CameraRotation(float a_fSpeed)
 		fAngleX += fDeltaMouse * a_fSpeed;
 	}
 	//Change the Yaw and the Pitch of the camera
-	m_pCamera->ChangeYaw(fAngleY * 15.0f);    //turn left or right
-	m_pCamera->ChangePitch(-fAngleX * 15.0f); //up or down
+	m_pCamera->ChangeYaw(fAngleY * 8.0f);    //turn left or right
+	m_pCamera->ChangePitch(-fAngleX * 8.0f); //up or down
+	
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
 }
 //Keyboard

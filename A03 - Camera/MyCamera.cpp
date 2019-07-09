@@ -198,6 +198,24 @@ void MyCamera::MoveSideways(float a_fDistance)
 /// Method for rotating the camera up or down
 void MyCamera::ChangePitch(float a_fDegree)
 {
+	// Clamping test
+	// For Rotating upward
+	// Stop it now if the local forward vector is almost pointing straight up
+	// m_v3Forward[1] (y-cooordinate) is close to 1
+	if (a_fDegree > 0)
+	{
+		if (m_v3Forward[1] > 0.8f)
+			return;
+	}
+	// Rotating downward
+	// Stop it now if the forward vector is almost pointing straight down
+	// m_v3Forward[1] (y-coordinate) is close to -1
+	else
+	{
+		if (m_v3Forward[1] < -0.8f)
+			return;
+	}
+
 	// Rotate the camera upward or downward and then calculate the new forward vector
 	m_v3Forward = glm::normalize(
 		m_v3Forward * cosf(glm::radians(a_fDegree)) +
@@ -221,8 +239,11 @@ void MyCamera::ChangeYaw(float a_fDegree)
 		m_v3Rightward * sinf(glm::radians(a_fDegree))
 	);
 
+	// The up vector is the cross product of forward 
+	m_v3Upward = glm::normalize(glm::cross(m_v3Rightward, m_v3Forward));
+
 	// Calculate the new right vector
-	m_v3Rightward = glm::cross(m_v3Forward, m_v3Upward);
+	m_v3Rightward = glm::cross(m_v3Forward, AXIS_Y);
 
 	// Update Target
 	m_v3Target = m_v3Position + m_v3Forward;
