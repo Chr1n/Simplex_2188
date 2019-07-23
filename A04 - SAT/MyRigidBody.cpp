@@ -287,6 +287,131 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	(eSATResults::SAT_NONE has a value of 0)
 	*/
 
-	//there is no axis test that separates this two objects
+	// Documentation from the book provided with the assignment
+
+	// Set variables for the future checks and be able to type less during all the checks
+	// 1st and 2nd OBB center point, and 1st and 2nd positive halwidth extents of OBB along each axis
+	vector3 v3CenterGA = GetCenterGlobal();
+	vector3 v3HalfWidthA = GetHalfWidth();
+	vector3 v3CenterGB = a_pOther->GetCenterGlobal();
+	vector3 v3HalfWidthB = a_pOther->GetHalfWidth();
+
+	// Set Rot Axis A
+	vector3 v3RotAxisA[3];
+	v3RotAxisA[0] = m_m4ToWorld[0];
+	v3RotAxisA[1] = m_m4ToWorld[1];
+	v3RotAxisA[2] = m_m4ToWorld[2];
+
+	// 1st Local x-, y-, z- axes
+	matrix3 m3RotAxisA = static_cast<matrix3>(m_m4ToWorld);
+	m3RotAxisA[0] = v3RotAxisA[0];
+	m3RotAxisA[1] = v3RotAxisA[1];
+	m3RotAxisA[2] = v3RotAxisA[2];
+
+	// Set Rot Axis B
+	vector3 v3RotAxisB[3];
+	v3RotAxisB[0] = a_pOther->m_m4ToWorld[0];
+	v3RotAxisB[1] = a_pOther->m_m4ToWorld[1];
+	v3RotAxisB[2] = a_pOther->m_m4ToWorld[2];
+
+	// 2nd local x-, y-, z- axes
+	matrix3 m3RotAxisB = static_cast<matrix3>(a_pOther->m_m4ToWorld);
+	m3RotAxisB[0] = v3RotAxisB[0];
+	m3RotAxisB[1] = v3RotAxisB[1];
+	m3RotAxisB[2] = v3RotAxisB[2];
+
+	// Get the inverse of RotA and RotB and store them
+	matrix3 m3RotAxisInverseA = glm::inverse(m3RotAxisA);
+	matrix3 m3RotAxisInverseB = glm::inverse(m3RotAxisB);
+
+	// Variables needed
+	float ra;
+	float rb;
+	matrix3 R;
+	matrix3 AbsR;
+
+	// Compute the rotation matrix expressing b in a's coordinate frame
+	R = m3RotAxisInverseB * m3RotAxisA;
+
+	// Compute translation vector t, and bring translation into a's coordinate frame
+	vector3 t = v3CenterGB - v3CenterGA;
+	t = m3RotAxisInverseA * vector4(t, 0.0f);
+
+	// Compute the common subexpressions.
+	// Add in an epsilon term to counteract arithmetic erros when two edges are
+	// parallel and their cross product is close to null
+	for (size_t i = 0; i < 3; i++)
+	{
+		for (size_t j = 0; j < 3; j++)
+		{
+			AbsR[i][j] = std::abs(R[i][j]) + FLT_EPSILON;
+		}
+	}
+
+	// Test axis L = A0, L = A1, L = A2
+	for (size_t i = 0; i < 3; i++)
+	{
+		ra = v3HalfWidthA[i];
+		rb = v3HalfWidthB[0] * AbsR[i][0] + v3HalfWidthB[1] * AbsR[i][1] + v3HalfWidthB[2] * AbsR[i][2];
+		if (std::abs(t[i]) > ra + rb) return 1;
+	}
+
+	// Test axis L = B0, L = B1, L = B2
+	for (size_t i = 0; i < 3; i++)
+	{
+		ra = v3HalfWidthA[0] * AbsR[0][i] + v3HalfWidthA[1] * AbsR[1][i] + v3HalfWidthA[2] * AbsR[2][i];
+		rb = v3HalfWidthB[i];
+		if (std::abs(t[0] * R[0][i] + t[1] * R[1][i] + t[2] * R[2][i]) > ra + rb) return 1;
+	}
+
+	// Test axis L = A0 x B0
+	ra = v3HalfWidthA[1] * AbsR[2][0] + v3HalfWidthA[2] * AbsR[1][0];
+	rb = v3HalfWidthB[1] * AbsR[0][2] + v3HalfWidthB[2] * AbsR[0][1];
+	if (std::abs(t[2] * R[1][0] - t[1] * R[2][0]) > ra + rb) return 1;
+
+	// Test axis L = A0 x B1
+	ra = v3HalfWidthA[1] * AbsR[2][1] + v3HalfWidthA[2] * AbsR[1][1];
+	rb = v3HalfWidthB[0] * AbsR[0][2] + v3HalfWidthB[2] * AbsR[0][0];
+	if (std::abs(t[2] * R[1][1] - t[1] * R[2][1]) > ra + rb) return 1;
+
+	// Test axis L = A0 x B2
+	ra = v3HalfWidthA[1] * AbsR[2][2] + v3HalfWidthA[2] * AbsR[1][2];
+	rb = v3HalfWidthB[0] * AbsR[0][1] + v3HalfWidthB[1] * AbsR[0][0];
+	if (std::abs(t[2] * R[1][2] - t[1] * R[2][2]) > ra + rb) return 1;
+
+	// Test axis L = A1 x B0
+	ra = v3HalfWidthA[0] * AbsR[2][0] + v3HalfWidthA[2] * AbsR[0][0];
+	rb = v3HalfWidthB[1] * AbsR[1][2] + v3HalfWidthB[2] * AbsR[1][1];
+	if (std::abs(t[0] * R[2][0] - t[2] * R[0][0]) > ra + rb) return 1;
+
+	// Test axis L = A1 x B1
+	ra = v3HalfWidthA[0] * AbsR[2][1] + v3HalfWidthA[2] * AbsR[0][1];
+	rb = v3HalfWidthB[0] * AbsR[1][2] + v3HalfWidthB[2] * AbsR[1][0];
+	if (std::abs(t[0] * R[2][1] - t[2] * R[0][1]) > ra + rb) return 1;
+
+	// Test axis L = A1 x B2
+	ra = v3HalfWidthA[0] * AbsR[2][2] + v3HalfWidthA[2] * AbsR[0][2];
+	rb = v3HalfWidthB[0] * AbsR[1][1] + v3HalfWidthB[1] * AbsR[1][0];
+	if (std::abs(t[0] * R[2][2] - t[2] * R[0][2]) > ra + rb) return 1;
+
+	// Test axis L = A2 x B0
+	ra = v3HalfWidthA[0] * AbsR[1][0] + v3HalfWidthA[1] * AbsR[0][0];
+	rb = v3HalfWidthB[1] * AbsR[2][2] + v3HalfWidthB[2] * AbsR[2][1];
+	if (std::abs(t[1] * R[0][0] - t[0] * R[1][0]) > ra + rb) return 1;
+
+	// Test axis L = A2 x B1
+	ra = v3HalfWidthA[0] * AbsR[1][1] + v3HalfWidthA[1] * AbsR[0][1];
+	rb = v3HalfWidthB[0] * AbsR[2][2] + v3HalfWidthB[2] * AbsR[2][0];
+	if (std::abs(t[1] * R[0][1] - t[0] * R[1][1]) > ra + rb) return 1;
+
+	// Test axis L = A2 x B2
+	ra = v3HalfWidthA[0] * AbsR[1][2] + v3HalfWidthA[1] * AbsR[0][2];
+	rb = v3HalfWidthB[0] * AbsR[2][1] + v3HalfWidthB[1] * AbsR[2][0];
+	if (std::abs(t[1] * R[0][2] - t[0] * R[1][2]) > ra + rb) return 1;
+	
+	//return eSATResults::SAT_AX;
+
+	// There is no axis test that separates this two objects
+	// The OBBs must be intersecting since no separating axis is found
 	return eSATResults::SAT_NONE;
 }
