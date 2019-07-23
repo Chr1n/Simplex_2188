@@ -287,7 +287,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	(eSATResults::SAT_NONE has a value of 0)
 	*/
 
-	// Documentation from the book provided with the assignment
+	// Documentation from the book provided with the assignment aided with coding SAT
 
 	// Set variables for the future checks and be able to type less during all the checks
 	// 1st and 2nd OBB center point, and 1st and 2nd positive halwidth extents of OBB along each axis
