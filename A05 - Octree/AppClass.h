@@ -24,6 +24,7 @@ class Application
 	uint m_uObjects = 0; //Number of objects in the scene
 	uint m_uOctantLevels = 0; //Number of levels in the octree
 	MyOctant* m_pRoot = nullptr; //A pointer that refers to the root node of the octree
+	bool m_bOctVisRep = true; //Bool needed to enable or disable the spacial optimization visualization for octree
 private:
 	String m_sProgrammer = "Christopher Lawrence - cml3051@rit.edu"; //programmer
 

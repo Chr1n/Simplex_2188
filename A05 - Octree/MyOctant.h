@@ -10,8 +10,8 @@ Date: 07/2019
 
 namespace Simplex
 {
-
-	//System Class
+	//MyOctant Class
+	//Declaration of necessary functions are within this header file for octree assignment
 	class MyOctant
 	{
 		int m_nData = 0;//number of elements in the list
@@ -211,7 +211,7 @@ namespace Simplex
 		*/
 		void Release(void);
 		/*
-		USAGE: Allocates member fields
+		USAGE: Allocates memory, variables, and member fields
 		ARGUMENTS: ---
 		OUTPUT: ---
 		*/

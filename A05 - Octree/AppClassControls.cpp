@@ -111,6 +111,8 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 		bFPSControl = !bFPSControl;
 		m_pCameraMngr->SetFPS(bFPSControl);
 		break;
+
+	// Show the next octant when page up is pressed
 	case sf::Keyboard::PageUp:
 		++m_uOctantID;
 		
@@ -118,6 +120,8 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 			m_uOctantID = - 1;
 		
 		break;
+
+	// Show the previous octant if page down is pressed
 	case sf::Keyboard::PageDown:
 		--m_uOctantID;
 		
@@ -125,28 +129,41 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 			m_uOctantID = - 1;
 		
 		break;
+
+	// If add is pressed on the num keypad, clear the dimensions from all entities
+	// Delete the oct tree, and create a new oct tree with the inputted amount
 	case sf::Keyboard::Add:
-		if (m_uOctantLevels < 4)
+		if (m_uOctantLevels < 4) //4
 		{
 			m_pEntityMngr->ClearDimensionSetAll();
 			++m_uOctantLevels;
 			
 			SafeDelete(m_pRoot);
 			m_pRoot = new MyOctant(m_uOctantLevels, 5);
-			
+			m_uOctantID = -1;
 		}
 		break;
+
+	// If subtract is pressed on the num keypad, clear the dimensions from all entities
+	// Delete the oct tree, and create a new oct tree with the inputted amount
 	case sf::Keyboard::Subtract:
-		if (m_uOctantLevels > 0)
+		if (m_uOctantLevels > 0) //0
 		{
 			m_pEntityMngr->ClearDimensionSetAll();
 			--m_uOctantLevels;
 			
 			SafeDelete(m_pRoot);
 			m_pRoot = new MyOctant(m_uOctantLevels, 5);
-			
+			m_uOctantID = -1;
 		}
 		break;
+
+	// Switch the bool value of m_bOctVisRep using the O key on the keyboard
+	// The bool will tell if the oct tree visual representation is enabled or disabled.
+	case sf::Keyboard::O:
+		m_bOctVisRep = !m_bOctVisRep;
+		break;
+
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = false;

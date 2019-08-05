@@ -32,8 +32,8 @@ void Application::InitVariables(void)
 		}
 	}
 	m_uOctantLevels = 1;
-	m_pEntityMngr->Update();
 	m_pRoot = new MyOctant(m_uOctantLevels, 5);
+	m_pEntityMngr->Update();
 }
 void Application::Update(void)
 {
@@ -57,8 +57,19 @@ void Application::Display(void)
 	// Clear the screen
 	ClearScreen();
 
-	//display octree
-	m_pRoot->Display();
+	//If the bool is true, it will show the visual representation of the spacial optimization
+	if (m_bOctVisRep)
+	{
+		//display the octree depending on index of octant
+		if (m_uOctantID == -1)
+		{
+			m_pRoot->Display();
+		}
+		else
+		{
+			m_pRoot->Display(m_uOctantID);
+		}
+	}
 	
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList();
