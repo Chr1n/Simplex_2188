@@ -174,11 +174,6 @@ void Simplex::MyOctant::Display(vector3 a_v3Color)
 	}
 }
 
-/// Method for displaying the leaves of the oct tree
-void Simplex::MyOctant::DisplayLeafs(vector3 a_v3Color)
-{
-}
-
 /// Method needed to clear the entity list for each of the child octants
 void Simplex::MyOctant::ClearEntityList(void)
 {

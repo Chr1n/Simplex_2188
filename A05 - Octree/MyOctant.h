@@ -133,13 +133,6 @@ namespace Simplex
 		*/
 		void Display(vector3 a_v3Color = C_YELLOW);
 		/*
-		USAGE: Displays the non empty leafs in the octree
-		ARGUMENTS:
-		- vector3 a_v3Color = REYELLOW -> Color of the volume to display.
-		OUTPUT: ---
-		*/
-		void DisplayLeafs(vector3 a_v3Color = C_YELLOW);
-		/*
 		USAGE: Clears the Entity list for each node
 		ARGUMENTS: ---
 		OUTPUT: ---
@@ -177,7 +170,7 @@ namespace Simplex
 		*/
 		bool ContainsMoreThan(uint a_nEntities);
 		/*
-		USAGE: Deletes all children and the children of their children (almost sounds apocalyptic)
+		USAGE: Deletes all children and the children of their children
 		ARGUMENTS: ---
 		OUTPUT: ---
 		*/
@@ -197,7 +190,7 @@ namespace Simplex
 		void AssignIDtoEntity(void);
 
 		/*
-		USAGE: Gets the total number of octants in the world
+		USAGE: Retrieves the total number of octants in the world
 		ARGUMENTS: ---
 		OUTPUT: ---
 		*/
@@ -205,7 +198,7 @@ namespace Simplex
 
 	private:
 		/*
-		USAGE: Deallocates member fields
+		USAGE: Deallocates the member fields
 		ARGUMENTS: ---
 		OUTPUT: ---
 		*/
