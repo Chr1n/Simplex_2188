@@ -13,15 +13,14 @@ public:
 	Vertex(const Vertex& vertex); // Copy
 	Vertex& operator=(const Vertex& vertex); // Copy Assignment operator
 	bool operator==(const Vertex& vertex) const; // equal operator
-	bool operator<(const Vertex& vertex) const; // less than operator
 
 	shared_ptr<Vertex> prevV; // previous vertex pointer
 	shared_ptr<Vertex> nextV; // next vertex pointer
 	int xPos; //xPos of vertex
 	int yPos; //yPos of vertex
-	float hCost; //heuristic
-	float gCost; //cost
-	float fCost; //priority
+	float hCost; //heuristic cost
+	float gCost; //gCost
+	float fCost; //fCost
 	bool open = false;
 	bool closed = false;
 	bool visited;

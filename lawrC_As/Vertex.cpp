@@ -75,15 +75,4 @@ bool Vertex::operator==(const Vertex& vertex) const
 	return false;
 }
 
-/// Less than operator to manipulate with positions
-bool Vertex::operator<(const Vertex& vertex) const
-{
-	if (this->xPos < vertex.xPos < xPos && this->yPos < vertex.yPos)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 

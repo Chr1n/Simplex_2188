@@ -1,7 +1,6 @@
 /// Graph.h is our custom class for keeping track of the entire grid
 #pragma once
 #include "Vertex.h"
-#include <memory>
 #include <vector>
 #include <stack>
 #include <queue>
